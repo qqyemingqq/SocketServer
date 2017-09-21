@@ -4,22 +4,22 @@ var fs = require('fs');
 var url = require('url')
 var path = require('path')
 
-app.listen(80);
+app.listen(8085);
 
 function handler(req, res) {
   // console.log(res);
-  // fs.readFile(__dirname + '/index.html',{encoding:'utf8',flag:'r'},
-  // function (err, data) {
-  //   if (err) {
-  //     res.writeHead(500);
-  //     return res.end('Error loading index.html');
-  //   }
-  //   console.log(data);
-  //   res.writeHead(200,{"Content-Type": "text/html"});
-  //   res.end(data);
-  // });
   var pathname = url.parse(req.url).pathname;
   var realPath = pathname;
+  fs.readFile(__dirname+pathname, { encoding: 'utf8', flag: 'r' }, function (err, file) {
+    if (err) {
+      res.writeHead(500);
+      return res.end('Error loading index.html');
+    }
+    // console.log(data);
+    res.writeHead(200,{"Content-Type": "text/html"});
+    res.end(file);
+  });
+}
   // path.exists(realPath, function (exists) {
   //   if (!exists) {
   //     response.writeHead(404, {
@@ -28,22 +28,21 @@ function handler(req, res) {
   //     response.write('This request URL " + pathname + " was not found on this server.');
   //     response.end();
   //   } else {
-  console.log(pathname);
-  fs.readFile(__dirname+pathname, { encoding: 'utf8', flag: 'r' }, function (err, file) {
-    if (err) {
-      res.writeHead(500, {
-        'Content-Type': 'text/plain'
-      });
-      res.end(err);
-    } else {
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      });
-      res.write(file, 'binary');
-      res.end();
-    }
-  });
-}
+//   console.log(pathname);
+//     if (err) {
+//       res.writeHead(500, {
+//         'Content-Type': 'text/plain'
+//       });
+//       res.end(err);
+//     } else {
+//       res.writeHead(200, {
+//         'Content-Type': 'text/html'
+//       });
+//       res.write(file, 'binary');
+//       res.end();
+//     }
+//   });
+// }
 //   });
 // }
 io.on('connection', function (socket) {
